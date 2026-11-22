@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  profiles      Profile[]
+  sessions      Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Profile {
+  id               String   @id @default(cuid())
+  userId           String
+  name             String
+  age              Int?
+  sex              String?  // male | female | other
+  heightCm         Float?
+  weightKg         Float?
+  bloodGroup       String?
+  knownConditions  String?  // JSON array string
+  currentMedicines String?  // JSON array string
+  allergies        String?  // JSON array string
+  emergencyContact String?  // JSON object string
+  isDefault        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  labReports       LabReport[]
+  checkIns         CheckIn[]
+  medicines        Medicine[]
+  chatMessages     ChatMessage[]
+  twinStatus       TwinStatus?
+
+  @@index([userId])
+}
+
+model TwinStatus {
+  id              String   @id @default(cuid())
+  profileId       String   @unique
+  circulatory     String   @default("normal")
+  respiratory     String   @default("normal")
+  digestive       String   @default("normal")
+  nervous         String   @default("normal")
+  endocrine       String   @default("normal")
+  immune          String   @default("normal")
+  urinary         String   @default("normal")
+  musculoskeletal String   @default("normal")
+  skin            String   @default("normal")
+  reasons         String?  // JSON: { system: string[] }
+  updatedAt       DateTime @updatedAt
+  profile         Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+}
+
+model LabReport {
+  id          String       @id @default(cuid())
+  profileId   String
+  fileName    String?
+  reportDate  DateTime?
+  rawText     String?
+  status      String       @default("pending") // pending | extracted | saved
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  profile     Profile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  labValues   LabValue[]
+
+  @@index([profileId])
+}
+
+model LabValue {
+  id          String    @id @default(cuid())
+  reportId    String
+  testName    String
+  value       Float?
+  valueText   String?
+  unit        String?
+  reportDate  DateTime?
+  flag        String?   // normal | high | low
+  createdAt   DateTime  @default(now())
+  report      LabReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+}
+
+model CheckIn {
+  id              String   @id @default(cuid())
+  profileId       String
+  date            DateTime @default(now())
+  sleepHours      Float?
+  mood            Int?     // 1-5
+  energy          Int?     // 1-5
+  waterLiters     Float?
+  symptoms        String?  // JSON array
+  restingHR       Int?
+  steps           Int?
+  systolicBP      Int?
+  diastolicBP     Int?
+  bloodSugar      Float?
+  notes           String?
+  createdAt       DateTime @default(now())
+  profile         Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}
+
+model Medicine {
+  id            String          @id @default(cuid())
+  profileId     String
+  name          String
+  dosage        String?
+  frequency     String?         // JSON: { times: string[], days: string[] }
+  startDate     DateTime?
+  endDate       DateTime?
+  notes         String?
+  isActive      Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  profile       Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  adherence     MedicineLog[]
+
+  @@index([profileId])
+}
+
+model MedicineLog {
+  id          String   @id @default(cuid())
+  medicineId  String
+  scheduledAt DateTime
+  takenAt     DateTime?
+  skipped     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  medicine    Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+
+  @@index([medicineId])
+}
+
+model ChatMessage {
+  id          String   @id @default(cuid())
+  profileId   String
+  role        String   // user | assistant
+  content     String
+  language    String   @default("en")
+  createdAt   DateTime @default(now())
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+}

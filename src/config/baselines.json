@@ -1,0 +1,123 @@
+{
+  "comment": "Age/sex-based normal baselines and lab reference ranges",
+  "vitals": {
+    "restingHeartRate": {
+      "adult": { "min": 60, "max": 100, "unit": "bpm" },
+      "child": { "min": 70, "max": 110, "unit": "bpm" },
+      "athlete": { "min": 40, "max": 60, "unit": "bpm" }
+    },
+    "bloodPressure": {
+      "normal": { "systolic": { "min": 90, "max": 120 }, "diastolic": { "min": 60, "max": 80 }, "unit": "mmHg" },
+      "elevated": { "systolic": { "min": 120, "max": 129 }, "diastolic": { "min": 60, "max": 80 } },
+      "high": { "systolic": { "min": 130, "max": 999 }, "diastolic": { "min": 80, "max": 999 } }
+    },
+    "breathingRate": {
+      "adult": { "min": 12, "max": 20, "unit": "breaths/min" },
+      "child": { "min": 20, "max": 30, "unit": "breaths/min" }
+    },
+    "temperature": {
+      "normal": { "min": 97.0, "max": 99.0, "unit": "°F" },
+      "fever": { "min": 100.4, "max": 999, "unit": "°F" },
+      "highFever": { "min": 103.0, "max": 999, "unit": "°F" }
+    }
+  },
+  "labRanges": {
+    "hemoglobin": {
+      "male": { "min": 13.5, "max": 17.5, "unit": "g/dL" },
+      "female": { "min": 12.0, "max": 15.5, "unit": "g/dL" },
+      "child": { "min": 11.5, "max": 15.5, "unit": "g/dL" }
+    },
+    "hba1c": {
+      "normal": { "min": 0, "max": 5.6, "unit": "%" },
+      "prediabetes": { "min": 5.7, "max": 6.4, "unit": "%" },
+      "diabetes": { "min": 6.5, "max": 999, "unit": "%" }
+    },
+    "glucose_fasting": {
+      "normal": { "min": 70, "max": 99, "unit": "mg/dL" },
+      "prediabetes": { "min": 100, "max": 125, "unit": "mg/dL" },
+      "diabetes": { "min": 126, "max": 999, "unit": "mg/dL" }
+    },
+    "totalCholesterol": {
+      "desirable": { "min": 0, "max": 199, "unit": "mg/dL" },
+      "borderline": { "min": 200, "max": 239, "unit": "mg/dL" },
+      "high": { "min": 240, "max": 999, "unit": "mg/dL" }
+    },
+    "ldl": {
+      "optimal": { "min": 0, "max": 99, "unit": "mg/dL" },
+      "near_optimal": { "min": 100, "max": 129, "unit": "mg/dL" },
+      "borderline": { "min": 130, "max": 159, "unit": "mg/dL" },
+      "high": { "min": 160, "max": 999, "unit": "mg/dL" }
+    },
+    "hdl": {
+      "low": { "min": 0, "max": 39, "unit": "mg/dL" },
+      "borderline": { "min": 40, "max": 59, "unit": "mg/dL" },
+      "optimal": { "min": 60, "max": 999, "unit": "mg/dL" }
+    },
+    "triglycerides": {
+      "normal": { "min": 0, "max": 149, "unit": "mg/dL" },
+      "borderline": { "min": 150, "max": 199, "unit": "mg/dL" },
+      "high": { "min": 200, "max": 999, "unit": "mg/dL" }
+    },
+    "tsh": {
+      "normal": { "min": 0.4, "max": 4.0, "unit": "mIU/L" },
+      "hypothyroid": { "min": 4.0, "max": 999, "unit": "mIU/L" },
+      "hyperthyroid": { "min": 0, "max": 0.4, "unit": "mIU/L" }
+    },
+    "creatinine": {
+      "male": { "min": 0.7, "max": 1.3, "unit": "mg/dL" },
+      "female": { "min": 0.5, "max": 1.1, "unit": "mg/dL" }
+    },
+    "urea": {
+      "adult": { "min": 7, "max": 20, "unit": "mg/dL" }
+    },
+    "sodium": {
+      "adult": { "min": 136, "max": 145, "unit": "mEq/L" }
+    },
+    "potassium": {
+      "adult": { "min": 3.5, "max": 5.0, "unit": "mEq/L" }
+    },
+    "wbc": {
+      "adult": { "min": 4.5, "max": 11.0, "unit": "x10³/µL" }
+    },
+    "platelets": {
+      "adult": { "min": 150, "max": 400, "unit": "x10³/µL" }
+    },
+    "vitaminD": {
+      "deficient": { "min": 0, "max": 19.9, "unit": "ng/mL" },
+      "insufficient": { "min": 20, "max": 29.9, "unit": "ng/mL" },
+      "sufficient": { "min": 30, "max": 100, "unit": "ng/mL" }
+    },
+    "vitaminB12": {
+      "deficient": { "min": 0, "max": 199, "unit": "pg/mL" },
+      "normal": { "min": 200, "max": 900, "unit": "pg/mL" }
+    },
+    "iron": {
+      "male": { "min": 65, "max": 175, "unit": "µg/dL" },
+      "female": { "min": 50, "max": 170, "unit": "µg/dL" }
+    },
+    "ferritin": {
+      "male": { "min": 20, "max": 500, "unit": "ng/mL" },
+      "female": { "min": 10, "max": 200, "unit": "ng/mL" }
+    },
+    "uricAcid": {
+      "male": { "min": 3.4, "max": 7.0, "unit": "mg/dL" },
+      "female": { "min": 2.4, "max": 6.0, "unit": "mg/dL" }
+    },
+    "alt": {
+      "male": { "min": 7, "max": 56, "unit": "U/L" },
+      "female": { "min": 7, "max": 45, "unit": "U/L" }
+    },
+    "ast": {
+      "adult": { "min": 10, "max": 40, "unit": "U/L" }
+    },
+    "albumin": {
+      "adult": { "min": 3.4, "max": 5.4, "unit": "g/dL" }
+    }
+  },
+  "bmiRanges": {
+    "underweight": { "min": 0, "max": 18.5 },
+    "normal": { "min": 18.5, "max": 24.9 },
+    "overweight": { "min": 25, "max": 29.9 },
+    "obese": { "min": 30, "max": 999 }
+  }
+}
