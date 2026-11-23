@@ -10,23 +10,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
+    if (!loading && !user) router.push('/login');
   }, [user, loading, router]);
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-slate-400 text-sm">Loading…</div>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>Loading…</span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex' }}>
       <Sidebar />
-      <main className="flex-1 min-h-screen overflow-y-auto ml-0 md:ml-56 lg:ml-64">
+      <main style={{ flex: 1, minHeight: '100vh', overflowY: 'auto' }}
+        className="md:pl-[240px]">
         {children}
       </main>
     </div>

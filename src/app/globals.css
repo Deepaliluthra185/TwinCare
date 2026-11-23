@@ -1,83 +1,219 @@
 @import "tailwindcss";
 
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --background: #020817;
-  --foreground: #f1f5f9;
+  /* Surfaces */
+  --bg:          #0E1116;
+  --surface:     #151A21;
+  --raised:      #1B222B;
+  --border:      #2A323D;
+
+  /* Text */
+  --text-primary:   #E8ECF1;
+  --text-secondary: #9AA6B2;
+  --text-disabled:  #4E5D6C;
+
+  /* Accent — teal, used only for primary actions / selection / links */
+  --accent:         #2DB5A3;
+  --accent-hover:   #26A091;
+  --accent-subtle:  rgba(45, 181, 163, 0.10);
+  --accent-border:  rgba(45, 181, 163, 0.25);
+
+  /* Health status — ONLY for body-system status indicators */
+  --status-normal:     #3FB68B;
+  --status-normal-bg:  rgba(63, 182, 139, 0.10);
+  --status-mild:       #E0A93B;
+  --status-mild-bg:    rgba(224, 169, 59, 0.10);
+  --status-attention:  #E5534B;
+  --status-attention-bg: rgba(229, 83, 75, 0.10);
+
+  /* Spacing grid: 8px base */
+  --radius: 8px;
 }
 
-* {
-  box-sizing: border-box;
+/* ── Light theme ───────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:          #F4F6F8;
+  --surface:     #FFFFFF;
+  --raised:      #EEF1F4;
+  --border:      #D6DCE3;
+  --text-primary:   #0E1116;
+  --text-secondary: #5A6778;
+  --text-disabled:  #AAB4BF;
+  --accent:         #1F9E8E;
+  --accent-hover:   #178A7C;
+  --accent-subtle:  rgba(31, 158, 142, 0.08);
+  --accent-border:  rgba(31, 158, 142, 0.20);
 }
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 15px; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Geist', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  /* No global transitions — only where explicitly needed */
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #0f172a;
-}
-::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+/* ── Typography scale ──────────────────────────────────────────────────────── */
+.tc-page-title    { font-size: 1.75rem; font-weight: 600; line-height: 1.2; color: var(--text-primary); }
+.tc-section-title { font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: var(--text-primary); }
+.tc-body          { font-size: 0.9375rem; font-weight: 400; line-height: 1.6; color: var(--text-primary); }
+.tc-caption       { font-size: 0.8125rem; font-weight: 400; line-height: 1.5; color: var(--text-secondary); }
+.tc-label         { font-size: 0.8125rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; display: block; }
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-disabled); }
+
+/* ── Surfaces / cards ──────────────────────────────────────────────────────── */
+.tc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
 }
 
-/* Smooth transitions */
-* {
-  transition-property: color, background-color, border-color;
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
+.tc-raised {
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
-/* Status colors */
-.status-normal { @apply text-emerald-400; }
-.status-mild { @apply text-amber-400; }
-.status-attention { @apply text-rose-400; }
-
-.bg-status-normal { @apply bg-emerald-500/20 border border-emerald-500/30; }
-.bg-status-mild { @apply bg-amber-500/20 border border-amber-500/30; }
-.bg-status-attention { @apply bg-rose-500/20 border border-rose-500/30; }
-
-/* Card styles */
-.card {
-  @apply bg-slate-900 border border-slate-800 rounded-xl p-5;
+/* ── Inputs ────────────────────────────────────────────────────────────────── */
+.tc-input {
+  display: block;
+  width: 100%;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 120ms ease;
 }
+.tc-input::placeholder { color: var(--text-disabled); }
+.tc-input:focus { border-color: var(--accent); }
 
-.card-hover {
-  @apply hover:border-slate-700 hover:bg-slate-800/80 cursor-pointer transition-all duration-200;
-}
+select.tc-input { cursor: pointer; }
+textarea.tc-input { resize: vertical; min-height: 80px; }
 
-/* Input styles */
-.input {
-  @apply bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 placeholder-slate-500 
-         focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 w-full text-sm;
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.tc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease;
+  white-space: nowrap;
 }
+.tc-btn-primary:hover  { background: var(--accent-hover); }
+.tc-btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
-.label {
-  @apply block text-xs font-medium text-slate-400 mb-1;
+.tc-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+  white-space: nowrap;
 }
+.tc-btn-secondary:hover  { background: var(--raised); border-color: var(--text-disabled); }
+.tc-btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* Button styles */
-.btn-primary {
-  @apply bg-teal-600 hover:bg-teal-500 text-white font-medium px-4 py-2 rounded-lg text-sm
-         disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+.tc-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease;
 }
+.tc-btn-ghost:hover { color: var(--text-primary); background: var(--raised); }
 
-.btn-secondary {
-  @apply bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium px-4 py-2 rounded-lg text-sm
-         disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+.tc-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--status-attention);
+  border: 1px solid var(--status-attention-bg);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease;
 }
+.tc-btn-danger:hover { background: var(--status-attention-bg); }
 
-.btn-danger {
-  @apply bg-rose-700 hover:bg-rose-600 text-white font-medium px-4 py-2 rounded-lg text-sm
-         disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+/* ── Status badges ─────────────────────────────────────────────────────────── */
+.tc-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
+.tc-status-dot.normal     { background: var(--status-normal); }
+.tc-status-dot.mild       { background: var(--status-mild); }
+.tc-status-dot.attention  { background: var(--status-attention); }
+
+/* Pulse keyframe for flagged systems */
+@keyframes tc-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+.tc-pulse { animation: tc-pulse 2.4s ease-in-out infinite; }
+
+/* Cross-fade keyframe for panel transitions */
+@keyframes tc-fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tc-fadein { animation: tc-fadein 180ms ease forwards; }
+
+/* ── Backward-compat aliases (used by existing pages) ──────────────────────── */
+.card          { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.card-hover    { cursor: pointer; }
+.card-hover:hover { background: var(--raised); }
+.input         { display: block; width: 100%; background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; font-size: 0.9375rem; color: var(--text-primary); outline: none; }
+.input:focus   { border-color: var(--accent); }
+.input::placeholder { color: var(--text-disabled); }
+.label         { display: block; font-size: 0.8125rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; }
+.btn-primary   { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; cursor: pointer; }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-secondary { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--text-primary); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; cursor: pointer; }
+.btn-secondary:hover { background: var(--raised); }
+.btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-danger    { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: var(--status-attention); border: 1px solid rgba(229,83,75,0.3); border-radius: var(--radius); padding: 8px 16px; font-size: 0.9375rem; font-weight: 500; cursor: pointer; }
+.btn-danger:hover { background: var(--status-attention-bg); }
