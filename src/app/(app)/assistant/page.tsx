@@ -143,7 +143,7 @@ export default function AssistantPage() {
 
       {noKey && (
         <div className="flex-shrink-0 mx-4 mt-3 bg-amber-500/10 border border-amber-500/20 rounded-lg px-4 py-2 text-amber-400 text-xs">
-          Add <code className="bg-slate-800 px-1 rounded">ANTHROPIC_API_KEY</code> to your <code className="bg-slate-800 px-1 rounded">.env</code> file and restart the server.
+          Add <code className="bg-slate-800 px-1 rounded">GEMINI_API_KEY</code> to your <code className="bg-slate-800 px-1 rounded">.env</code> file and restart the server.
         </div>
       )}
 

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getUserFromRequest } from '@/lib/auth';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import baselines from '@/config/baselines.json';
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 type Params = Promise<{ id: string }>;
 
@@ -26,8 +24,8 @@ export async function POST(req: NextRequest, { params }: { params: Params }) {
     return NextResponse.json({ error: 'No text to extract from' }, { status: 400 });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: 'AI service not configured' }, { status: 503 });
+  if (!process.env.GEMINI_API_KEY) {
+    return NextResponse.json({ error: 'AI service not configured. Add GEMINI_API_KEY to .env' }, { status: 503 });
   }
 
   const prompt = `You are a medical lab report parser. Extract all test results from the following lab report text.
@@ -36,8 +34,8 @@ Return a JSON array of objects with this exact shape:
 [
   {
     "testName": "string (standardized name, e.g. 'Hemoglobin', 'HbA1c', 'Fasting Glucose')",
-    "value": number or null (numeric value only),
-    "valueText": "string (original value as text, e.g. '12.5' or 'Reactive')",
+    "value": number or null,
+    "valueText": "string (original value as text)",
     "unit": "string (e.g. 'g/dL', '%', 'mg/dL') or null",
     "reportDate": "ISO date string or null"
   }
@@ -45,7 +43,7 @@ Return a JSON array of objects with this exact shape:
 
 Rules:
 - Extract only measurable test results, not patient info or doctor notes
-- Normalize test names (e.g., 'Hb' -> 'Hemoglobin', 'FBS' -> 'Fasting Glucose', 'Sr. Creatinine' -> 'Creatinine')
+- Normalize test names (e.g. 'Hb' -> 'Hemoglobin', 'FBS' -> 'Fasting Glucose', 'Sr. Creatinine' -> 'Creatinine')
 - If a value is non-numeric (like 'Reactive'), set value to null and put the text in valueText
 - Do not include reference ranges in the value field
 - Return ONLY the JSON array, no other text
@@ -62,22 +60,20 @@ ${report.rawText.slice(0, 8000)}`;
   }> = [];
 
   try {
-    const message = await client.messages.create({
-      model: 'claude-3-5-haiku-20241022',
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: prompt }],
-    });
-
-    const text = message.content[0].type === 'text' ? message.content[0].text : '';
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
     const jsonMatch = text.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
       extracted = JSON.parse(jsonMatch[0]);
     }
   } catch (err) {
-    console.error('[extract]', err);
+    console.error('[extract/gemini]', err);
     return NextResponse.json({ error: 'Extraction failed' }, { status: 500 });
   }
 
+  // Flag each value against reference ranges
   const sex = report.profile.sex || 'male';
   const flagged = extracted.map((item) => {
     let flag = 'normal';
